@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<meta name="theme-color" content="#FF6B8B">
+<title>ShowWee · 秀点恩爱</title>
+<link rel="stylesheet" href="./app.css">
+</head>
+<body>
+<div class="stage">
+  <header class="appbar" id="appbar">
+    <div class="appbar-left">
+      <div class="back" id="btnBack" hidden>‹</div>
+      <div class="brand" id="brand">ShowWee<span class="brand-heart">♥</span></div>
+      <div class="title" id="pageTitle" hidden></div>
+    </div>
+    <div class="appbar-right">
+      <div class="chip" id="chip">原型 · 假数据</div>
+    </div>
+  </header>
+
+  <!-- 页面容器 -->
+  <main class="viewport" id="viewport">
+    <!-- 欢迎页 -->
+    <section class="screen" id="screen-welcome">
+      <div class="welcome">
+        <div class="welcome-glow g1"></div>
+        <div class="welcome-glow g2"></div>
+        <div class="float-heart fh1">♥</div>
+        <div class="float-heart fh2">♥</div>
+        <div class="float-heart fh3">♥</div>
+        <div class="welcome-hero">
+          <div class="logo">♡</div>
+          <h1 class="w-title">ShowWee</h1>
+          <p class="w-slogan">秀点恩爱，只给懂的人看</p>
+        </div>
+        <div class="w-features">
+          <div class="w-feature"><span class="wf-icon">📸</span><div><b>记录你们的日常</b><p>一起吃饭、散步、看夕阳，都值得被看见</p></div></div>
+          <div class="w-feature"><span class="wf-icon">💗</span><div><b>打卡养亲密度</b><p>每天一次互动打卡，一起把等级养上去</p></div></div>
+          <div class="w-feature"><span class="wf-icon">🔒</span><div><b>只属于你们两个人的角落</b><p>没有定位、没有私聊、没有打扰</p></div></div>
+        </div>
+        <div class="w-bottom">
+          <button class="btn-main" onclick="App.go('community')">开始逛社区</button>
+          <span class="w-hint">无需登录，先看看大家的甜蜜瞬间</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- 社区页 -->
+    <section class="screen" id="screen-community">
+      <div class="page">
+        <div class="notice"><span onclick="App.refresh()" style="cursor:pointer">刷新一下 · 偶遇新的甜蜜瞬间</span><span class="notice-btn" onclick="App.go('checkin')">我也要打卡</span></div>
+        <div id="feed"></div>
+        <div class="feed-end">— 已经看到这里啦 —</div>
+        <div class="tabbar-note">仅展示大家公开分享到社区的记录</div>
+      </div>
+    </section>
+
+    <!-- 详情页 -->
+    <section class="screen" id="screen-detail">
+      <div class="page" id="detailBody"></div>
+    </section>
+
+    <!-- 打卡页 -->
+    <section class="screen" id="screen-checkin">
+      <div class="page">
+        <div class="hero">
+          <div class="hero-top">
+            <div><div class="hero-kicker">今天的打卡</div><div class="hero-date" id="ckDate"></div></div>
+            <div class="streak"><b>7</b><span>天连续</span></div>
+          </div>
+          <div class="hero-stats">
+            <div class="stat"><b>5</b><span>本周打卡</span></div>
+            <div class="stat-line"></div>
+            <div class="stat"><b>+36</b><span>本周亲密度</span></div>
+            <div class="stat-line"></div>
+            <div class="stat"><b>Lv.5</b><span>心心相印</span></div>
+          </div>
+        </div>
+        <div class="card">
+          <label class="lbl">今天一起做了什么</label>
+          <div class="chips" id="ckChips"></div>
+          <textarea id="ckText" maxlength="200" oninput="App.count(this)" placeholder="记一下今天的小事，比如他记得你想喝的那杯奶茶…"></textarea>
+          <div class="counter"><span id="ckCount">0</span>/200</div>
+          <div class="photo-row" id="ckPhotos"></div>
+          <div class="photo-tip">照片为原型占位图，点一下可以删除</div>
+          <label class="lbl">谁可以看到</label>
+          <div class="visibility">
+            <div class="vis on" data-v="public" onclick="App.setVis(this)"><b>🌍 公开到社区</b><span>所有人能在社区刷到</span></div>
+            <div class="vis" data-v="private" onclick="App.setVis(this)"><b>🔒 仅彼此可见</b><span>只留在你们两个人的记录里</span></div>
+          </div>
+          <button class="btn-main" id="ckPublish" onclick="App.publish()">完成打卡</button>
+        </div>
+        <div class="flow-tip">💡 打卡完成后会自动回到社区分享，公开的记录会出现在最顶上</div>
+        <div class="tabbar-note">不做提醒、不做定位，安安静静地记录</div>
+      </div>
+    </section>
+
+    <!-- 个人中心 -->
+    <section class="screen" id="screen-profile">
+      <div class="page" id="profileBody"></div>
+    </section>
+
+    <!-- 周报 -->
+    <section class="screen" id="screen-weekly">
+      <div class="page" id="weeklyBody"></div>
+    </section>
+  </main>
+
+  <!-- 底部导航 -->
+  <nav class="tabbar" id="tabbar">
+    <div class="tab" data-tab="community" onclick="App.go('community')">
+      <svg viewBox="0 0 24 24" class="tab-ico" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h16v11H9l-5 4z"/><path d="M8 10h8"/><path d="M8 13h5"/></svg>
+      <span>社区分享</span>
+    </div>
+    <div class="tab" data-tab="checkin" onclick="App.go('checkin')">
+      <svg viewBox="0 0 24 24" class="tab-ico" fill="currentColor"><path d="M12 21s-6.7-4.3-9.3-8.2C1 10.1 2.4 6 6 6c2.1 0 3.7 1.2 4.5 2.6h3C14.3 7.2 15.9 6 18 6c3.6 0 5 4.1 3.3 6.8C18.7 16.7 12 21 12 21z"/></svg>
+      <span>互动打卡</span>
+    </div>
+    <div class="tab" data-tab="profile" onclick="App.go('profile')">
+      <svg viewBox="0 0 24 24" class="tab-ico" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="8" r="4"/><path d="M5 20c1.5-3.4 4-5 7-5s5.5 1.6 7 5"/></svg>
+      <span>个人中心</span>
+    </div>
+  </nav>
+</div>
+
+<div class="toast" id="toast"></div>
+<div class="sheet-mask" id="sheetMask" onclick="App.closeSheet()">
+  <div class="sheet" onclick="event.stopPropagation()">
+    <div class="sheet-heart">♥</div>
+    <div class="sheet-title" id="sheetTitle"></div>
+    <div class="sheet-desc" id="sheetDesc"></div>
+    <div class="sheet-actions" id="sheetActions"></div>
+  </div>
+</div>
+
+<script src="./app.js"></script>
+</body>
+</html>
